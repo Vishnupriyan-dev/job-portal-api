@@ -10,6 +10,7 @@ raw_password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST", "127.0.0.1")
 database = os.getenv("DB_NAME")
 driver=os.getenv("DB_DRIVER")
+port=os.getenv("DB_PORT")
 
 if not all([user, raw_password, database]):
     raise RuntimeError("Database environment variables not set")
@@ -17,7 +18,7 @@ if not all([user, raw_password, database]):
 password = quote_plus(raw_password)
 
 DATABASE_URL = (
-    f"{driver}://{user}:{password}@{host}:3306/{database}"
+    f"{driver}://{user}:{password}@{host}:{port}/{database}"
 )
 
 engine = create_engine(
