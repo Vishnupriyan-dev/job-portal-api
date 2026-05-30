@@ -14,14 +14,11 @@ from app.schema.user_schema import (
 )
 
 from app.exceptions.exception import (
-    AuthenticationError,
-    AuthorizationError,
     UserNotFoundError,
     RoleAlreadyGranted,
     MobileAlreadyExistsError,
     EmailAlreadyExistsError,
     InvalidCredentialsError,
-    EmptyError,
     ApplicationNotFound,
     NoFieldError)
 
@@ -44,13 +41,18 @@ from app.dependencies.dependency import require_admin,get_current_user
 
 router=APIRouter(prefix="/user",tags=["user"])
 
-@router.post("/signup")
+@router.get("/")
+def read_root():
+    return {"message":"Job Portal API Running"}
+
+@router.post("/signup",status_code=200)
 def signup(payload:RegisterUserInput,db:Session=Depends(get_db)):
     try:
         return register_user_service(db,name=payload.name,
         number=payload.number,
         email=payload.email,
         password=payload.password)
+    
     except MobileAlreadyExistsError:
         raise HTTPException(
             status_code=409,

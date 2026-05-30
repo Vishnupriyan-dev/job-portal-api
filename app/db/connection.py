@@ -2,13 +2,14 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from urllib.parse import quote_plus
-from sqlalchemy.orm import Session
+
 
 
 user = os.getenv("DB_USER")
 raw_password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST", "127.0.0.1")
 database = os.getenv("DB_NAME")
+driver=os.getenv("DB_DRIVER")
 
 if not all([user, raw_password, database]):
     raise RuntimeError("Database environment variables not set")
@@ -16,7 +17,7 @@ if not all([user, raw_password, database]):
 password = quote_plus(raw_password)
 
 DATABASE_URL = (
-    f"mysql+pymysql://{user}:{password}@{host}:3306/{database}"
+    f"{driver}://{user}:{password}@{host}:3306/{database}"
 )
 
 engine = create_engine(

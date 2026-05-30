@@ -67,7 +67,11 @@ def register_user(
             role=role,
             password=hashed_password
         )
-        return create_access_token(user_id, role)
+        token_str=create_access_token(user_id, role)
+        return{
+            "access":token_str,
+            "token_type":"bearer"
+        }
     except IntegrityError as e:
         error_msg = str(e.orig)
 

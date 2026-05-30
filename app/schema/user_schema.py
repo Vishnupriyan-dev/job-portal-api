@@ -94,7 +94,7 @@ class UserUpdateInput(
     password: str | None = None
 
     @model_validator(mode="after")
-    def at_least_one_field(cls, model):
+    def at_least_one_field(self, model):
         if not any(
             getattr(model, field) is not None
             for field in ["name", "number", "email", "password"]
