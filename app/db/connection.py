@@ -2,17 +2,23 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from urllib.parse import quote_plus
-
+from dotenv import load_dotenv
+load_dotenv(override=True)
 
 
 user = os.getenv("DB_USER")
 raw_password = os.getenv("DB_PASSWORD")
-host = os.getenv("DB_HOST", "127.0.0.1")
+host = os.getenv("DB_HOST")
 database = os.getenv("DB_NAME")
 driver=os.getenv("DB_DRIVER")
 port=os.getenv("DB_PORT")
 
-if not all([user, raw_password, database]):
+print("HOST =", host)
+print("PORT =", port)
+print("DB =", database)
+print("USER =", user)
+
+if not all([user, raw_password, database, driver, port]):
     raise RuntimeError("Database environment variables not set")
 
 password = quote_plus(raw_password)
