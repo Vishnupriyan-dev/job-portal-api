@@ -55,9 +55,5 @@ Access Swagger UI at:
 
 http://127.0.0.1:8000/docs
 
-## Current Limitations
 
-- Automated tests not implemented yet
-- No pagination for job listings
-- No deployment configuration included
 
