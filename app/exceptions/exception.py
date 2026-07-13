@@ -128,4 +128,8 @@ class SkillInsertionError(AuthErr):
     def __init__(self,msg):
         self.msg=msg
 
+class NoAlphabetsError(AuthErr):
+    def __init__(self,msg):
+        self.msg=msg
+
 
