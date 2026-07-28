@@ -18,7 +18,7 @@ print("PORT =", port)
 print("DB =", database)
 print("USER =", user)
 
-if not all([user, raw_password, database, driver, port]):
+if not all([user, raw_password, database, driver, port, host]):
     raise RuntimeError("Database environment variables not set")
 
 password = quote_plus(raw_password)
@@ -26,16 +26,12 @@ password = quote_plus(raw_password)
 DATABASE_URL = (
     f"{driver}://{user}:{password}@{host}:{port}/{database}"
 )
-
+print(DATABASE_URL)
+print(os.path.exists("certs/isrgrootx1.pem"))
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
-    pool_recycle=1800,
-    connect_args={
-        "ssl": {
-            "ca": "certs/isrgrootx1.pem"
-        }
-    }
+    pool_recycle=1800
 )
 
 SessionLocal = sessionmaker(
