@@ -31,7 +31,12 @@ print(os.path.exists("certs/isrgrootx1.pem"))
 engine = create_engine(
     DATABASE_URL,
     pool_pre_ping=True,
-    pool_recycle=1800
+    pool_recycle=1800,
+    connect_args={
+        "ssl": {
+            "ca": "certs/isrgrootx1.pem"
+        }
+    }
 )
 
 SessionLocal = sessionmaker(
