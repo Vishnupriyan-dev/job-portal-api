@@ -64,10 +64,6 @@ class AuthorizationError(AuthErr):
 class NoFieldError(AuthErr):
     def __init__(self,msg):
         self.msg=msg
-        
-class NoAlphabetsError(AuthErr):
-    def __init__(self,msg):
-        self.msg=msg
 
 class MobNoError(AuthErr):
     def __init__(self,msg):
