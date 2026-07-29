@@ -32,7 +32,7 @@ def require_valid_non_empty(value: str, field_name: str) -> str:
         raise ValueError(f"{field_name} cannot be empty")
 
     if not pattern_string_check.fullmatch(value):
-        raise NoAlphabetsError(f"{field_name} must contain alphabets")
+        raise ValueError(f"{field_name} must contain alphabets")
 
     return value
 
