@@ -210,18 +210,24 @@ def search_jobs(
     industry=None
 ):
     query = """
-        SELECT
-            j.job_id,
-            j.job_title,
-            j.job_type,
-            c.comp_name,
-            l.location,
-            c.industry_type
-        FROM jobs j
-        INNER JOIN companies c ON j.comp_id = c.comp_id
-        INNER JOIN locations l ON c.comp_id = l.comp_id
-        WHERE 1 = 1
-    """
+                 SELECT
+                      j.job_id,
+                      j.job_title,
+                      j.job_description,
+                      j.job_type,
+                      j.salary,
+                      j.requirements,
+                      j.status,
+                      j.posted_by,
+                      j.posted_at,
+                      c.comp_name,
+                      l.location,
+                      c.industry_type
+                 FROM jobs j
+                 INNER JOIN companies c ON j.comp_id = c.comp_id
+                 INNER JOIN locations l ON c.comp_id = l.comp_id
+                 WHERE 1 = 1
+             """
 
     params = {}
 

@@ -1,33 +1,51 @@
 from sqlalchemy.orm import Session
+
 from app.repository.application_repository import insert_application
 from app.repository.job_repository import active_job
 from app.repository.user_repository import active_user
-from app.exceptions.exception import JobExpiredError,UserInactiveError,AuthorizationError
+from app.repository.application_repository import application_exists
+
+from app.exceptions.exception import (
+    JobExpiredError,
+    UserInactiveError,
+    AuthorizationError,
+    DuplicateApplicationError
+)
 
 
 def job_apply(
     db: Session,
-    user_id:int,
+    user_id: int,
     job_id: int,
-    user_role:str
+    user_role: str,
+    resume_path: str
 ):
-    if user_role!="job_seeker":
+    if user_role != "job_seeker":
         raise AuthorizationError("UNAUTHORIZED")
-    is_job_active=active_job(db,job_id)
+
+    is_job_active = active_job(db, job_id)
+
     if not is_job_active:
         raise JobExpiredError("JOB_EXPIRED")
-    is_user_active=active_user(db,user_id)
+
+    is_user_active = active_user(db, user_id)
+
     if not is_user_active:
         raise UserInactiveError("USER_INACTIVE")
+
+    if application_exists(db, user_id, job_id):
+        raise DuplicateApplicationError(
+            "You have already applied for this job."
+    )
+
     app_id = insert_application(
-            db,
-            user_id=user_id,
-            job_id=job_id,
-            posted_id=is_job_active.posted_by
-        )
+        db,
+        user_id=user_id,
+        job_id=job_id,
+        posted_id=is_job_active.posted_by,
+        resume_path=resume_path
+    )
 
     db.commit()
+
     return {"application_id": app_id}
-
-
-   

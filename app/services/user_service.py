@@ -146,7 +146,7 @@ def grant_recruiter_role(
 def log_in(db: Session, email: str, password: str):
     user_data = fetch_user_by_email(db, email)
     if not user_data:
-        raise InvalidCredentialsError()
+        raise InvalidCredentialsError("INVALID_EMAIL_OR_PASSWORD")
     if user_data["password"] is None:
         raise InvalidCredentialsError()
     if not verify_password(password, user_data["password"]):

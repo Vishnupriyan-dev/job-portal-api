@@ -129,3 +129,6 @@ class NoAlphabetsError(AuthErr):
         self.msg=msg
 
 
+class DuplicateApplicationError(AuthErr):
+    def __init__(self, msg):
+        self.msg = msg
