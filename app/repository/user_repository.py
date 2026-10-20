@@ -33,6 +33,24 @@ def fetch_user_by_id(db:Session,user_id:int):
     ).mappings().first()
 
 
+def fetch_profile_by_id(db: Session, user_id: int):
+    query = text("""
+        SELECT
+            user_id,
+            user_name AS name,
+            mob_no AS number,
+            email
+        FROM users
+        WHERE user_id = :user_id
+          AND status != 'DELETED'
+    """)
+
+    return db.execute(
+        query,
+        {"user_id": user_id}
+    ).mappings().first()
+
+
 def create_user(
     db: Session,
     name: str,

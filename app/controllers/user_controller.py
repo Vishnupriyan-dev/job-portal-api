@@ -37,6 +37,7 @@ from app.services.user_service import job_search as job_search_service
 from app.services.user_service import list_skills as list_skills_service
 from app.services.user_service import my_recents as my_recents_service
 from app.dependencies.dependency import require_admin,get_current_user
+from app.services.user_service import get_user_profile as get_user_profile_service
 
 
 router=APIRouter(prefix="/user",tags=["user"])
@@ -170,4 +171,22 @@ def recently_applied_jobs(days,db:Session=Depends(get_db),current_user=Depends(g
         raise HTTPException(
             status_code=404,
             detail="NO_RECENT_APPLICATIONS"
+        )
+
+
+@router.get("/profile/me")
+def get_my_profile(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    try:
+        return get_user_profile_service(
+            db,
+            user_id=current_user.user_id
+        )
+
+    except UserNotFoundError:
+        raise HTTPException(
+            status_code=404,
+            detail="USER_NOT_FOUND"
         )

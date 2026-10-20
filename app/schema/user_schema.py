@@ -11,6 +11,7 @@ from app.exceptions.exception import NoFieldError
     
 from pydantic import BaseModel, EmailStr, field_validator, Field, model_validator
 from pydantic_core.core_schema import FieldValidationInfo
+from typing import Optional
 from app.validators.string_validators import (
     require_non_empty,
     require_valid_non_empty,
@@ -82,26 +83,21 @@ class LoginInput(BaseModel):
 
 
 
-class UserUpdateInput(
-    BaseModel,
-    NameValidationMixin,
-    NumberValidationMixin,
-    PasswordValidationMixin
-):
-    name: str | None = None
-    number: str | None = None
-    email: EmailStr | None = None
-    password: str | None = None
+class UserUpdateInput(BaseModel):
+    name: Optional[str] = None
+    number: Optional[str] = None
+    email: Optional[str] = None
+    password: Optional[str] = None
 
     @model_validator(mode="after")
-    def at_least_one_field(self, model):
+    def at_least_one_field(self):
         if not any(
-            getattr(model, field) is not None
-            for field in ["name", "number", "email", "password"]
+            getattr(self, field) is not None
+            for field in ("name", "number", "email", "password")
         ):
-            raise ValueError("At least one value must be provided")
+            raise ValueError("At least one field must be provided")
 
-        return model
+        return self
 
 
 

@@ -15,6 +15,7 @@ from app.repository.user_repository import add_skills,fetch_all_skills
 from app.repository.user_repository import search_jobs
 from app.repository.user_repository import update_user
 from app.repository.user_repository import update_user_role
+from app.repository.user_repository import fetch_profile_by_id
 from app.repository.user_repository import fetch_user_with_same_email,get_recent_applications
 from app.repository.company_repository import insert_company,insert_location,fetch_company_by_name
 from app.schema.user_schema import RegisterUserInput
@@ -273,3 +274,17 @@ def my_recents(db: Session, user_id: str, days: int):
 
 def list_skills(db:Session):
     return fetch_all_skills(db)
+
+
+def get_user_profile(db: Session, user_id: int):
+    profile = fetch_profile_by_id(db, user_id)
+
+    if not profile:
+        raise UserNotFoundError()
+
+    return {
+        "user_id": profile["user_id"],
+        "name": profile["name"],
+        "number": profile["number"],
+        "email": profile["email"]
+    }
